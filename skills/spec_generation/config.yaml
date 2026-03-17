@@ -1,0 +1,61 @@
+skill:
+  name: spec_generation
+  displayName: 仕様書生成スキル
+  version: 1.0.0
+  description: 要件定義から詳細仕様書を自動生成する
+
+trigger:
+  manual: true
+  commands:
+    - "仕様書を生成"
+    - "スペックを作成"
+    - "spec generation"
+
+input:
+  required:
+    - name: requirements
+      description: 対象の要件（要件IDまたは自然言語での説明）
+      type: string
+  optional:
+    - name: specType
+      description: 生成する仕様種別
+      type: enum
+      values: [screen, component, api, model, auto]
+      default: auto
+    - name: requirementIds
+      description: 対象の要件ID（カンマ区切り）
+      type: string
+    - name: detail
+      description: 詳細度
+      type: enum
+      values: [standard, detailed]
+      default: standard
+
+output:
+  files:
+    - pattern: "docs/specifications/01_screen_*.md"
+      condition: "specType == 'screen' || specType == 'auto'"
+    - pattern: "docs/specifications/02_component_*.md"
+      condition: "specType == 'component' || specType == 'auto'"
+    - pattern: "docs/specifications/03_api_*.md"
+      condition: "specType == 'api' || specType == 'auto'"
+    - pattern: "docs/specifications/04_model_*.md"
+      condition: "specType == 'model' || specType == 'auto'"
+  updates:
+    - "docs/specifications/00_specification_index.md"
+
+context:
+  required_files:
+    - "docs/requirements/*.md"
+  recommended_files:
+    - "docs/architecture/*.md"
+    - "docs/specifications/00_specification_index.md"
+    - "docs/specifications/*_template.md"
+
+validation:
+  checklist:
+    - "全PLACEHOLDERが置換されていること"
+    - "要件IDとのトレーサビリティが確保されていること"
+    - "画面遷移に矛盾がないこと"
+    - "データモデルとAPI仕様のフィールドが一致していること"
+    - "エラーケースが網羅されていること"

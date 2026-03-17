@@ -1,0 +1,111 @@
+version: "1.0"
+
+# AI エージェント Skills 定義
+# 各スキルの詳細（プロンプト・設定・例）は skills/[skill_name]/ ディレクトリを参照
+
+# 開発フローにおけるスキル実行順序:
+#   要件定義 → [spec_generation] → [test_generation] → 実装 →
+#   [code_analysis] → [refactoring] → [documentation] → CI/CD
+
+skills:
+  spec_generation:
+    name: 仕様書生成スキル
+    version: 1.0.0
+    description: 要件定義から詳細仕様書を自動生成する
+    prompt: skills/spec_generation/prompt.md
+    config: skills/spec_generation/config.yaml
+    capabilities:
+      - 自然言語の要件から仕様書への変換
+      - 画面仕様・API仕様・データモデル仕様の自動生成
+      - 仕様テンプレートに準拠した構造化出力
+      - 要件IDとのトレーサビリティ確保
+    input:
+      - 要件定義書（docs/requirements/）
+      - アーキテクチャ設計書（docs/architecture/）
+    output:
+      - 仕様書（docs/specifications/）
+    examples: skills/spec_generation/examples/
+
+  test_generation:
+    name: テスト生成スキル
+    version: 1.0.0
+    description: 仕様書やコードからテストコードを自動生成し、TDDフローを加速する
+    prompt: skills/test_generation/prompt.md
+    config: skills/test_generation/config.yaml
+    capabilities:
+      - ユニットテストの自動生成（Model / Service / Utils）
+      - ウィジェットテストの自動生成（Widget / Screen）
+      - 統合テスト・E2Eテストの自動生成
+      - 正常系・異常系・境界値の網羅的テストケース設計
+      - モック/スタブの適切な生成
+    input:
+      - 仕様書（docs/specifications/）
+      - ソースコード（lib/）
+    output:
+      - ユニットテスト（test/）
+      - 統合テスト（integration_test/）
+    examples: skills/test_generation/examples/
+
+  code_analysis:
+    name: コード解析スキル
+    version: 1.0.0
+    description: コード品質を自動的に分析し、スコアリングと改善提案を提供する
+    prompt: skills/code_analysis/prompt.md
+    config: skills/code_analysis/config.yaml
+    capabilities:
+      - 静的コード解析（Lint / スタイル準拠チェック）
+      - アーキテクチャ設計方針への準拠チェック
+      - サイクロマティック複雑度・行数等のメトリクス計算
+      - セキュリティ脆弱性検出
+      - パフォーマンス問題の検出
+      - 100点満点のスコアリング
+    input:
+      - ソースコード（lib/）
+      - analysis_options.yaml
+      - アーキテクチャ設計書（docs/architecture/）
+    output:
+      - 解析レポート（サマリー・スコア・検出事項・改善案）
+
+  documentation:
+    name: ドキュメント生成スキル
+    version: 1.0.0
+    description: コードから各種ドキュメントを自動生成する
+    prompt: skills/documentation/prompt.md
+    config: skills/documentation/config.yaml
+    capabilities:
+      - API リファレンスドキュメント生成
+      - アーキテクチャドキュメント更新
+      - セットアップガイド生成
+      - CHANGELOG 生成（Keep a Changelog形式）
+      - インラインコメント（DartDoc）追加
+    input:
+      - ソースコード（lib/）
+      - 既存ドキュメント（docs/）
+      - pubspec.yaml
+    output:
+      - docs/api/（APIドキュメント）
+      - docs/architecture/（アーキテクチャドキュメント）
+      - docs/setup_guide.md（セットアップガイド）
+      - CHANGELOG.md（変更履歴）
+
+  refactoring:
+    name: リファクタリングスキル
+    version: 1.0.0
+    description: コードスメルを検出し、具体的な改善提案とリファクタリング後のコードを提供する
+    prompt: skills/refactoring/prompt.md
+    config: skills/refactoring/config.yaml
+    capabilities:
+      - コードスメルの自動検出（肥大化・変更困難性・不要な複雑さ・Flutter固有）
+      - 変更前後のコード付き改善提案
+      - デザインパターンの適用提案
+      - 優先度付き実行順序の提示
+    input:
+      - ソースコード（lib/）
+      - テストコード（test/）
+      - アーキテクチャ設計書（docs/architecture/）
+    output:
+      - リファクタリング提案レポート
+      - 改善後コード（autoApply有効時）
+    safety:
+      - テスト未存在時は先に test_generation を推奨
+      - autoApply: false がデフォルト（提案のみ）

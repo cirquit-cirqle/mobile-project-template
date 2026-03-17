@@ -1,0 +1,42 @@
+# Flutter/Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+*.xcworkspace
+*.xcuserdata
+
+# Android
+*.apk
+*.aab
+*.jks
+*.keystore
+local.properties
+
+# iOS
+Pods/
+.symlinks/
+Flutter/Flutter.framework
+Flutter/Flutter.podspec
+
+# Coverage
+coverage/
+*.lcov
+
+# Pub
+pubspec.lock
+
+# Environment
+.env
+.env.*

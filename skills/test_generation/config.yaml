@@ -1,0 +1,63 @@
+skill:
+  name: test_generation
+  displayName: テスト生成スキル
+  version: 1.0.0
+  description: 仕様書やコードからテストコードを自動生成し、TDDフローを加速する
+
+trigger:
+  manual: true
+  commands:
+    - "テストを生成"
+    - "テストコードを作成"
+    - "test generation"
+
+input:
+  required:
+    - name: target
+      description: テスト対象（仕様書パス、ソースコードパス、または機能説明）
+      type: string
+  optional:
+    - name: testType
+      description: テスト種別
+      type: enum
+      values: [unit, widget, integration, auto]
+      default: auto
+    - name: coverage
+      description: カバレッジ目標（%）
+      type: integer
+      default: 80
+    - name: language
+      description: テスト名の記述言語
+      type: enum
+      values: [ja, en]
+      default: ja
+    - name: mockFramework
+      description: モックフレームワーク
+      type: enum
+      values: [mockito, mocktail]
+      default: mockito
+
+output:
+  files:
+    - pattern: "test/**/*_test.dart"
+    - pattern: "integration_test/**/*_test.dart"
+      condition: "testType == 'integration' || testType == 'auto'"
+    - pattern: "test/helpers/**"
+      condition: "ヘルパーやフィクスチャが必要な場合"
+
+context:
+  required_files: []
+  recommended_files:
+    - "docs/specifications/*.md"
+    - "docs/architecture/01_layer_design.md"
+    - "docs/architecture/04_error_handling.md"
+    - "lib/**/*.dart"
+    - "pubspec.yaml"
+
+validation:
+  checklist:
+    - "全テストが flutter test で成功すること"
+    - "テスト名が日本語で「〜すること」形式であること"
+    - "Arrange-Act-Assert パターンに従っていること"
+    - "正常系・異常系・境界値が網羅されていること"
+    - "外部依存がモック化されていること"

@@ -1,0 +1,63 @@
+skill:
+  name: documentation
+  displayName: ドキュメント生成スキル
+  version: 1.0.0
+  description: コードから自動的にドキュメントを生成する
+
+trigger:
+  manual: true
+  commands:
+    - "ドキュメントを生成"
+    - "ドキュメント作成"
+    - "documentation"
+
+input:
+  required:
+    - name: docType
+      description: 生成するドキュメント種別
+      type: enum
+      values: [api_doc, architecture_doc, setup_guide, changelog, inline_comments]
+    - name: target
+      description: 対象パス
+      type: string
+      default: "lib/"
+  optional:
+    - name: audience
+      description: 想定読者
+      type: enum
+      values: [developer, stakeholder, new_member]
+      default: developer
+    - name: language
+      description: 記述言語
+      type: enum
+      values: [ja, en]
+      default: ja
+
+output:
+  files:
+    - pattern: "docs/api/*.md"
+      condition: "docType == 'api_doc'"
+    - pattern: "docs/architecture/*.md"
+      condition: "docType == 'architecture_doc'"
+    - pattern: "docs/setup_guide.md"
+      condition: "docType == 'setup_guide'"
+    - pattern: "CHANGELOG.md"
+      condition: "docType == 'changelog'"
+    - pattern: "lib/**/*.dart"
+      condition: "docType == 'inline_comments'"
+
+context:
+  required_files:
+    - "pubspec.yaml"
+  recommended_files:
+    - "docs/**/*.md"
+    - "lib/**/*.dart"
+    - ".github/workflows/*.yml"
+    - "analysis_options.yaml"
+
+validation:
+  checklist:
+    - "技術的に正確であること（コードと矛盾がないこと）"
+    - "対象読者に適した言葉遣いであること"
+    - "コード例がコンパイル可能であること"
+    - "Mermaid図が正しいシンタックスであること"

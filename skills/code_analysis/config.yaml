@@ -1,0 +1,59 @@
+skill:
+  name: code_analysis
+  displayName: コード解析スキル
+  version: 1.0.0
+  description: コード品質を自動的に分析し、改善提案を提供する
+
+trigger:
+  manual: true
+  commands:
+    - "コードを解析"
+    - "コード品質チェック"
+    - "code analysis"
+
+input:
+  required:
+    - name: target
+      description: 解析対象のパス（ファイルまたはディレクトリ）
+      type: string
+      default: "lib/"
+  optional:
+    - name: scope
+      description: 解析範囲
+      type: enum
+      values: [file, directory, project]
+      default: project
+    - name: categories
+      description: 解析カテゴリ（カンマ区切り）
+      type: string
+      default: "all"
+    - name: severity
+      description: 出力する最低重大度
+      type: enum
+      values: [critical, high, medium, low]
+      default: low
+
+output:
+  format: markdown
+  sections:
+    - summary_table
+    - score
+    - findings_by_severity
+    - improvement_suggestions
+
+context:
+  required_files:
+    - "analysis_options.yaml"
+  recommended_files:
+    - "docs/architecture/00_architecture_overview.md"
+    - "docs/architecture/01_layer_design.md"
+    - "docs/architecture/04_error_handling.md"
+    - "pubspec.yaml"
+    - "lib/**/*.dart"
+
+validation:
+  checklist:
+    - "全検出事項にファイルパスと行番号が含まれていること"
+    - "全検出事項に具体的な改善案が含まれていること"
+    - "スコアが算出基準に基づいて正しく計算されていること"
+    - "Critical/High の検出事項には修正コード例が含まれていること"

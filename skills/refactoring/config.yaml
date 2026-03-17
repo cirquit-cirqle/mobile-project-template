@@ -1,0 +1,62 @@
+skill:
+  name: refactoring
+  displayName: リファクタリングスキル
+  version: 1.0.0
+  description: コード設計の改善提案を提供し、保守性・可読性を向上させる
+
+trigger:
+  manual: true
+  commands:
+    - "リファクタリング"
+    - "コード改善"
+    - "refactoring"
+
+input:
+  required:
+    - name: target
+      description: リファクタリング対象のパス
+      type: string
+  optional:
+    - name: scope
+      description: 解析範囲
+      type: enum
+      values: [file, directory, project]
+      default: file
+    - name: focus
+      description: 注力するコードスメルのカテゴリ
+      type: enum
+      values: [all, bloaters, change_preventers, dispensables, flutter]
+      default: all
+    - name: autoApply
+      description: 安全な変更を自動適用するか
+      type: boolean
+      default: false
+
+output:
+  format: markdown
+  sections:
+    - code_smell_summary
+    - proposals_by_priority
+    - execution_order
+    - design_pattern_suggestions
+
+context:
+  required_files: []
+  recommended_files:
+    - "docs/architecture/01_layer_design.md"
+    - "docs/architecture/02_state_management.md"
+    - "test/**/*_test.dart"
+    - "analysis_options.yaml"
+
+validation:
+  checklist:
+    - "全提案に変更前・変更後のコードが含まれていること"
+    - "振る舞いが変わらないことが確認できること"
+    - "テスト実行手順が含まれていること"
+    - "提案が優先度順に並んでいること"
+
+safety:
+  rules:
+    - "autoApply: false の場合、コード変更を行わず提案のみ出力する"
+    - "autoApply: true の場合も、Requires Test の提案は適用せず提案のみとする"
+    - "既存テストが存在しない場合、先に test_generation スキルの実行を推奨する"
