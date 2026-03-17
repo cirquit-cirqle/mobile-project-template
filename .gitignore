@@ -40,3 +40,6 @@ pubspec.lock
 # Environment
 .env
 .env.*
+
+# Claude Code (personal local settings)
+.claude/settings.local.json
