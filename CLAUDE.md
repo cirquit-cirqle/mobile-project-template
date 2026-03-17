@@ -74,6 +74,22 @@ const maxFetchCount = 100;
 
 ---
 
+## AIスキル
+
+以下のタスクを依頼する際は、対応するSkillの `prompt.md` を先に読み込んでから実行すること。
+
+| タスク | Skill | プロンプト |
+| --- | --- | --- |
+| 仕様書を生成する | spec_generation | [skills/spec_generation/prompt.md](skills/spec_generation/prompt.md) |
+| テストコードを生成する | test_generation | [skills/test_generation/prompt.md](skills/test_generation/prompt.md) |
+| コード品質を解析する | code_analysis | [skills/code_analysis/prompt.md](skills/code_analysis/prompt.md) |
+| ドキュメントを生成する | documentation | [skills/documentation/prompt.md](skills/documentation/prompt.md) |
+| リファクタリング提案を行う | refactoring | [skills/refactoring/prompt.md](skills/refactoring/prompt.md) |
+
+スキルの詳細（入力パラメータ・出力先・検証ルール）は各スキルの `config.yaml` を参照すること。
+
+---
+
 ## プロジェクト概要
 
 - **フレームワーク:** Flutter（Web / Android / iOS）
